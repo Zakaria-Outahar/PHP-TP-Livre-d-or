@@ -24,16 +24,13 @@
             color:#fefefe;
         }
 
-        footer{
-            position: absolute;
-            width: 100%;
-            bottom: 0;
-        }
-
         .container{
             width: 50%;
             margin: 5vh auto;
             font-family: Arial, Helvetica, sans-serif;
+        }
+        .container p{
+            font-size: 1.2rem;
         }
         form[method="post"] > *{
             margin-bottom: 15px;

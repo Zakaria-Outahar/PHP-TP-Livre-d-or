@@ -1,16 +1,25 @@
 <?php
 
 require_once 'class/Message.php';
+require_once 'class/GuestBook.php';
 $errors = null;
+$success = false;
 
+$guestbook = new GuestBook(__DIR__ . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'messages');
 if(isset($_POST['username'], $_POST['message'])){
     $message = new Message($_POST['username'], $_POST['message']);
 
     if($message->isValid()){
-
+        $guestbook->addMessage($message);
+        $success = true;
+        $_POST = [];
     } else{
         $errors = $message->getErrors();
     }
+}
+
+if(!$guestbook->emptyFile()){
+    $messages = $guestbook->getMessages();
 }
 
 $title = "Livre d'or";
@@ -24,6 +33,12 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . 'head
         <?php if(!empty($errors)): ?>
         <div class="alert alert-danger">
             Formulaire invalide
+        </div>
+        <?php endif ?>
+
+        <?php if($success): ?>
+        <div class="alert alert-success">
+            Merci pour votre message !
         </div>
         <?php endif ?>
 
@@ -44,8 +59,12 @@ require __DIR__ . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . 'head
         </form>
 
 
-
-
+        <?php if(!empty($messages)): ?>
+            <h1 class="mt-4">Vos messages</h1>
+            <?php foreach($messages as $message): ?>
+                <?= $message->toHTML() ?>
+            <?php endforeach ?>
+        <?php endif ?>
     </div>
 
 
